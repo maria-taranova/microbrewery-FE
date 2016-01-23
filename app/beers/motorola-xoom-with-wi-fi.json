@@ -4,7 +4,7 @@
         "os": "Android 3.0", 
         "ui": "Honeycomb"
     }, 
-    "availability": [
+    "inventory": [
         ""
     ], 
     "battery": {

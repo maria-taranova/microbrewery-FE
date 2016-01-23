@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "private": true,
-  "name": "angular-beercat",
+  "name": "beer",
   "description": "A tutorial application for AngularJS",
   "repository": "https://github.com/angular/angular-beercat",
   "license": "MIT",

@@ -4,7 +4,7 @@
         "os": "Android 2.2", 
         "ui": "MOTOBLUR"
     }, 
-    "availability": [
+    "inventory": [
         "AT&T"
     ], 
     "battery": {

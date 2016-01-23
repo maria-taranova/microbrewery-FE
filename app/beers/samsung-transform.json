@@ -4,7 +4,7 @@
         "os": "Android 2.1", 
         "ui": "Stock Android + Sprint ID Pack"
     }, 
-    "availability": [
+    "inventory": [
         "Sprint"
     ], 
     "battery": {

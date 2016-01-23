@@ -6,7 +6,19 @@ var beercatServices = angular.module('beercatServices', ['ngResource']);
 
 beercatServices.factory('beer', ['$resource',
   function($resource){
-    return $resource('beers/:beerId.json', {}, {
-      query: {method:'GET', params:{beerId:'beers'}, isArray:true}
+         $.ajax({
+                   url:"../controller/products.php",
+                    dataType:"html",
+                    type:"POST",
+                    data:{
+                        method:"detail",
+                        id: beerId
+                    },
+                    success:function(resp){
+                            var resp = JSON.parse(resp);
+                            return resp;
+                         
+                    }
+                });
     });
   }]);

@@ -31,7 +31,7 @@ agent.addListener('next', function (error, agent) {
       phone.id = agent.url.split(/\//).pop();
       phone.name = body.find('h2').text().trim();
       phone.description = body.find('.description').text().trim();
-      phone.availability = c1.find('table:nth-child(1) th:contains("Availability")+td').text().trim().split(/\s*\n\s*/),
+      phone.inventory = c1.find('table:nth-child(1) th:contains("inventory")+td').text().trim().split(/\s*\n\s*/),
       phone.battery = {
         type: c1.find('table:nth-child(2) th:contains("Type")+td').text(),
         talkTime:  c1.find('table:nth-child(2) th:contains("Talk time")+td').text(),

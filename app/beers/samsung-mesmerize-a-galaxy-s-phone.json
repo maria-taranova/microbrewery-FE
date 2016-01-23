@@ -4,7 +4,7 @@
         "os": "Android 2.1", 
         "ui": "TouchWiz"
     }, 
-    "availability": [
+    "inventory": [
         "US Cellular"
     ], 
     "battery": {
