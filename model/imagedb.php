@@ -15,7 +15,7 @@ function get_images(){
     
     $query = "SELECT title, path, uid FROM images";
     $result = $db->query($query);
-    echo json_encode($result->fetchAll());
+    echo json_encode($result->fetchAll(PDO::FETCH_CLASS));
 }
 
 function get_images_by_uid(){
@@ -23,7 +23,7 @@ function get_images_by_uid(){
     
     $query = "SELECT title, path FROM images WHERE user_id = ".$_POST['user_id'];
     $result = $db->query($query);
-    echo json_encode($result->fetchAll());
+    echo json_encode($result->fetchAll(PDO::FETCH_CLASS));
 }
 
 function update_image(){

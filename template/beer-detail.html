@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-4">
+    <div class="beer-images">
+      <img ng-src="{{mainImageUrl}}">
+    </div>
+    <ul class="beer-thumbs list-unstyled">
+      <li ng-repeat="img in beer.images">
+        <img ng-src="{{img}}" ng-click="setImage(img)">
+      </li>
+    </ul>
+  </div>
+  <div class="col-xs-12 col-sm-8">
+    <h1 id="title">{{beer.title}}</h1>
+    <p>{{beer.description}}</p>
+    <hr>
+    <ul class="specs list-unstyled">
+      <li>
+        <span>Details</span>
+        <dl>
+          <dt>Inventory</dt>
+          <dd>{{beer.inventory}}</dd>
+        </dl>
+           <dl>
+          <dt>Alcohol</dt>
+          <dd>{{beer.alcohol}}</dd>
+        </dl>
+             <dl>
+          <dt>Price</dt>
+          <dd>{{beer.price | currency:"$"}}</dd>
+        </dl>
+             <dl>
+          <dt>Volume</dt>
+          <dd>{{beer.vol}}</dd>
+        </dl>
+      </li>
+        <li>
+
+
+  <label for="qty">Select number of cans:</label>
+<input type="number" name="input" id="qty" ng-model="beer.qty"
+           min="1" max="{{beer.inventory}}"  required>
+        
+        </li>
+        
+        <li>
+
+            <br/>
+            <button id="add" class="btn" ng-click="addItem(beer)">Add to Cart</button>
+        
+        </li>
+    </ul>
+  </div>
+</div>

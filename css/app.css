@@ -1,0 +1,164 @@
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+body {
+  padding-top: 70px;
+}
+footer {
+  padding: 30px 0;
+}
+.jumbotron {
+  background: url('http://i1070.photobucket.com/albums/u496/md_mcc/beerlabel1-02_zps2ycu5zhi.png') no-repeat 1% 1%;
+  background-size: cover;
+  text-shadow: 0 1px 3px rgba(255,255,255,.8);
+  color: rgba(0,1,0,.9);
+}
+.preview-img {
+  height: 200px;
+  margin-bottom: 16px;
+  position: relative;
+}
+.preview-img .label {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  display: block;
+}
+.preview-img img {
+  max-height: 200px;
+}
+h2 {
+  font-size: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.item {
+  height: 500px;
+}
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+    -o-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+.beer-images {
+  text-align: center;
+}
+.beer-images img {
+  max-width: 100%;
+}
+
+.beer-thumbs li {
+  float: left;
+  width: 30%;
+  padding:16px;
+}
+.beer-thumbs li img {
+  max-width: 100%;
+}
+.specs li {
+  display: inline-block;
+  vertical-align: top;
+  width: 30%;
+}
+
+.step{
+    display: none;
+}
+
+.step-active{
+    display: block;
+}
+
+/*Spinner*/
+/*Credit card*/
+/* CSS for Credit Card Payment form */
+.credit-card-box .panel-title {
+    display: inline;
+    font-weight: bold;	
+}
+.credit-card-box .form-control.error {
+    border-color: red;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 8px rgba(255,0,0,0.6);
+}
+.credit-card-box label.error {
+  font-weight: bold;
+  color: red;
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+.credit-card-box .payment-errors {
+  font-weight: bold;
+  color: red;
+  padding: 2px 8px;
+  margin-top: 2px;
+}
+.credit-card-box label {
+    display: block;
+}
+/* The old "center div vertically" hack */
+.credit-card-box .display-table {
+    display: table;
+}
+.credit-card-box .display-tr {
+    display: table-row;
+}
+.credit-card-box .display-td {
+    display: table-cell;
+    vertical-align: middle;
+    width: 50%;
+}
+/* Just looks nicer */
+.credit-card-box .panel-heading img {
+    min-width: 180px;
+}
+
+.table th {
+   text-align: center;   
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <div class="row form-group">
+            <div class="col-xs-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="active" id="st-1">
+                        <a href="#">
+                        <h4 class="list-group-item-heading">Step 1</h4>
+                        <p class="list-group-item-text">Shopping Cart</p></a>
+                    </li>
+                    <li class="disabled" id="st-2">
+                        <a href="#">
+                        <h4 class="list-group-item-heading">Step 2</h4>
+                        <p class="list-group-item-text">Second step
+                        description</p></a>
+                    </li>
+                    <li class="disabled" id="st-3">
+                        <a href="#">
+                        <h4 class="list-group-item-heading">Step 3</h4>
+                        <p class="list-group-item-text">Third step
+                        description</p></a>
+                    </li>
+                </ul>
+            </div>
+        </div><!--*Cart*-->
+        <div class="row setup-content step-active" id="step-1">
+            <div class="col-xs-12">
+                <div class="col-md-12 well text-center">
+                    <h2>Shopping Cart</h2>
+                    <div>
+                        <table class="table">
+                            <tr>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="item in items">
+                                <td>{{item.title}}</td>
+                                <td><input class="input-mini" type=
+                                "number" min="1" id="qty" ng-model="item.qty" ng-click="addItem(item)"></td>
+                                <td>{{item.cost|currency}}</td>
+                                <td>{{item.qty * item.cost | currency}}</td>
+                                <td>
+                                    [<a href="">X</a>]
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a class="btn btn-small" href="">add item</a>
+                                </td>
+                                <td></td>
+                                <td>Total:</td>
+                                <td>{{total() | currency}}</td>
+                            </tr>
+                        </table>
+                    </div><button class="btn btn-primary btn-lg" onclick=
+                    "togglediv('step-1', 'step-2')">Proceed</button>
+                </div>
+            </div>
+        </div><!--*Payment*-->
+        <div class="row setup-content step" id="step-2">
+            <div class="col-xs-12">
+                <div class="col-md-12 well">
+                    <h1 class="text-center">Payment</h1>
+                    <!--Form-->
+                    <input ng-model="customer.fname" placeholder="Your name"/>
+                    <input ng-model="customer.lname" placeholder="Your last name"/></br>
+                    <input ng-model="customer.email" placeholder="Email"/></br>
+                    <input ng-model="customer.city" placeholder="City"/></br>
+                    <input ng-model="customer.postalcode" placeholder="Postal Code"/></br>
+
+                    
+                    <!--Form End-->
+                    <button class="btn btn-primary btn-lg" ng-click="pay()" >Payment</button>
+                <!--onclick=
+                    " togglediv('step-2', 'step-3')"-->
+                </div>
+            </div>
+        </div><!--*Thank you*-->
+        <div class="row setup-content step" id="step-3">
+            <div class="col-xs-12">
+                <div class="col-md-12 well">
+                    <h1 class="text-center">Thank you</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
