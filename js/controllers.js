@@ -41,6 +41,8 @@ beercatApp.filter('checkmark', function() {
   }
 });
 
+
+
 beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location', function($scope, cartItems, $http, $location) {
     $scope.totalqty = cartItems.getHowMany();
     $scope.$on('scanner-started', function(){
@@ -58,8 +60,37 @@ beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location
       console.log(data);
       
   });
-
-    
+//http://jsfiddle.net/ExpertSystem/wYfs4/
+//http://jsfiddle.net/1qhba9fs/1/
+        $scope.filter = {};
+        $scope.getOptionsFor = function (propName) {
+        return ($scope.beers || []).map(function (b) {
+            return b[propName];
+        }).filter(function (b, idx, arr) {
+            return arr.indexOf(b) === idx;
+        });
+        };
+            $scope.filterByProperties = function (beer) {
+        // Use this snippet for matching with AND
+        var matchesAND = true;
+        for (var prop in $scope.filter) {
+            if (noSubFilter($scope.filter[prop])) continue;
+            if (!$scope.filter[prop][beer[prop]]) {
+                matchesAND = false;
+                break;
+            }
+        }
+        return matchesAND;
+                
+                
+                
+            };
+             function noSubFilter(subFilterObj) {
+        for (var key in subFilterObj) {
+            if (subFilterObj[key]) return false;
+        }
+        return true;
+    }
    
     //$scope.total = cartItems.getQty();
     //$scope.totalqty = $scope.total;
@@ -69,6 +100,23 @@ beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location
     
 
 }]);
+
+beercatApp.filter('keys', function () {
+    return function (object) {
+        return Object.keys(object || {}).filter(function (key) {
+            return key !== '$$hashKey';
+        });
+    };
+});
+
+
+beercatApp.filter('capitalizeFirst', function () {
+    return function (str) {
+        str = str || '';
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    };
+});
+
 //About Controller
 beercatApp.controller('AboutCtrl',['$scope','$http', '$location', function($scope, $http, $location) {
     
