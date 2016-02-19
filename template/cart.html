@@ -44,7 +44,7 @@
                             <tr ng-repeat="item in items">
                                 <td>{{item.title}}</td>
                                 <td><input class="input-mini" type=
-                                "number" min="1" id="qty" ng-model="item.qty" ng-click="addItem(item)"></td>
+                                "number" min="1" id="qty" ng-model="item.qty"></td>
                                 <td>{{item.cost|currency}}</td>
                                 <td>{{item.qty * item.cost | currency}}</td>
                                 <td>

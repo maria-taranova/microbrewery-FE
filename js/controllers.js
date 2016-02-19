@@ -35,14 +35,17 @@ beercatApp.config(['$routeProvider', '$locationProvider', function($routeProvide
 }]);
 
 /* Filter */
-beercatApp.filter('checkmark', function() {
-  return function(input) {
-    return input ? '\u2713' : '\u2718';
-  }
-});
+
 
 beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location', function($scope, cartItems, $http, $location) {
-    $scope.totalqty = cartItems.getHowMany();
+    
+    //check if something is in the cart and set the qty
+    var quant = cartItems.getHowMany();
+    if(quant == undefined){
+        $scope.totalqty = 0;
+    }else{
+        $scope.totalqty = quant;
+    }
     $scope.$on('scanner-started', function(){
         $scope.totalqty = cartItems.getHowMany();
     });
@@ -55,7 +58,6 @@ beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location
 
   $http.get('./controller/products.php').success(function(data, status, headers, config) {
     $scope.beers = data;
-      console.log(data);
       
   });
 
@@ -66,7 +68,8 @@ beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location
      
     //console.log("ksfmgk"+$scope.totalqty);
 
-    
+      $scope.orderProp = 'title';
+
 
 }]);
 //About Controller
@@ -78,21 +81,13 @@ beercatApp.controller('AboutCtrl',['$scope','$http', '$location', function($scop
 beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
     function ($scope,  cartItems, $http) {
         
-      $scope.$on('scanner-started', function(){
+    $scope.$on('scanner-started', function(){
         $scope.items = cartItems.getProperty('cart');
     });
    
     $scope.items = cartItems.getProperty('cart');
   
-   // $scope.invoice = cartItems.getProperty();
-    /*$scope.addItem = function() {
-        $scope.invoice.items.push({
-            qty: 1,
-            title: '',
-            cost: 0
-        });
-    },*/
-
+    
     $scope.removeItem = function(index) {
         $scope.items.splice(index, 1);
     },
@@ -106,12 +101,10 @@ beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
         return total;
     }
     
-     $scope.addItem = function(beer){
-          var qty = document.getElementById("qty").value;
-          var beer = beer;
-          beer.qty = parseInt(qty);
-          beer.price = beer.cost;
-          cartItems.setProperty(beer);
+     $scope.modifyCart = function(){
+         console.log($scope.items);
+         cartItems.setProperty($scope.items);
+         console.log("cart modified");
       }
     
      $scope.customer = {
@@ -202,7 +195,6 @@ var url_img = './controller/product_img.php';
          
     $scope.beer.images = images;
     $scope.mainImageUrl= images[0];
-    console.log($scope.beer.images);
   });
 
   $scope.setImage = function(imageUrl) {

@@ -9,16 +9,17 @@
 		</div>-->
         <img width= "700px" src ="http://i1070.photobucket.com/albums/u496/md_mcc/beerlabel1-02_zps2ycu5zhi.png"/>
 		<div class="row">
-			<div class="col-xs-12 col-sm-6 col-lg-4 item" ng-repeat="beer in beers | filter: search">
+			<div class="col-xs-12 col-sm-6 col-lg-4 item" ng-repeat="beer in beers | filter: search|  orderBy:orderProp">
                 
 				<div class="preview-img text-center">
 					<img ng-src="{{beer.image}}" alt="{{beer.title}}"/>
             <span class="label"
-									ng-init="status = beer.status ? 'In Stock' : 'Pre-order'"
+									ng-init="status = beer.status ? 'Pre-order' : 'In Stock'"
 									ng-class="{'label-success':beer.status, 'label-warning': !beer.status}">
               {{status}}
             </span>
 				</div>
+               <img style="height: 30px; float: right"ng-src="{{beer.alcohol| alcoholPercentage}}"</img>
 				<h2>{{beer.title}}</h2>
 				<p>{{beer.description}}</p>
 				<p><a class="btn btn-default" href="#/beers/{{beer.id}}" role="button">View details &raquo;</a></p>
@@ -35,6 +36,12 @@
                                         
 					<input type="text" class="form-control" placeholder="Search..." ng-model="search">
 				</form>
+Sort by:
+<select ng-model="orderProp">
+  <option value="title">Title</option>
+  <option value="alcohol">Alcohol</option>
+</select>
+         
 			</div>
             
                   

@@ -41,12 +41,29 @@ beercatApp.factory('cacheService', function($http, storageService) {
     };
 });
 beercatApp.service('cartItems', function(cacheService, $rootScope) {
-    var invoice = {
-        items: [],
-        cart_qty: 0,
-    };
+        //var to store items added by the user
+         var invoice = {
+                items: []
+                }
+         
+         
+         
+        if(localStorage.cart != undefined){    
+             
+          
+                invoice.items = cacheService.getData('cart');
+                console.log("There were items in the cart");
+
+            }
+ 
+    
     return {
         getProperty: function(key) {
+            if(!cacheService.getData(key)){
+                return  this.invoice.items;
+
+            }
+            
            return cacheService.getData(key);
            
         },
@@ -76,19 +93,7 @@ beercatApp.service('cartItems', function(cacheService, $rootScope) {
         },
         setProperty: function(beer) {
             var beer = beer;
-         
-            var existingItems = this.getProperty('cart');
-            console.log(existingItems);
-            if(existingItems != null){
-            for(var i=0; i<existingItems.length;i++){
-                if(existingItems[i].id == beer.id){
-                    console.log(existingItems[i]);
-                    beer.qty+=existingItems[i].qty;
-                   
-                }
-              }
-            }
-            //start here
+       
             invoice.items.push({
                 id: beer.id,
                 qty: beer.qty,
@@ -96,10 +101,23 @@ beercatApp.service('cartItems', function(cacheService, $rootScope) {
                 cost: parseInt(beer.price)
             });
 
-           cacheService.removeData('cart');
-           console.log('the cache '+cacheService.getData('cart'));
-           cacheService.setData('cart', invoice.items);
+            cacheService.setData('cart', invoice.items);
             this.getQty();
+        },
+        reWrite: function(beer){
+            invoice.items = [];
+            invoice.items.push(beer);
+            console.log(invoice.items);
+            this.getQty();
+
         }
+      /*  UpdateCartStatus: function(item, state) {
+            $scope.searchResults = _.map($scope.searchResults, function(el)         {
+                if (el.itemId === item.itemId) {
+                    el.isInCart = state;
+                }
+                return el;
+            });
+        };*/
     };
 });
