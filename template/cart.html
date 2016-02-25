@@ -48,7 +48,7 @@
                                 <td>{{item.cost|currency}}</td>
                                 <td>{{item.qty * item.cost | currency}}</td>
                                 <td>
-                                    [<a href="">X</a>]
+                                    [<a ng-click="removeItem($index)" href="">X</a>]
                                 </td>
                             </tr>
                             <tr>

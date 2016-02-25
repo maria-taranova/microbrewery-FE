@@ -39,17 +39,7 @@ beercatApp.config(['$routeProvider', '$locationProvider', function($routeProvide
 
 beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location', function($scope, cartItems, $http, $location) {
     
-    //check if something is in the cart and set the qty
-    var quant = cartItems.getHowMany();
-    if(quant == undefined){
-        $scope.totalqty = 0;
-    }else{
-        $scope.totalqty = quant;
-    }
-    $scope.$on('scanner-started', function(){
-        $scope.totalqty = cartItems.getHowMany();
-    });
-    console.log('totalqty '+$scope.totalqty); 
+    
  
   //console.log('$location.url() - ', $location.url());
   //console.log('$location.path() - ', $location.path());
@@ -81,17 +71,64 @@ beercatApp.controller('AboutCtrl',['$scope','$http', '$location', function($scop
 beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
     function ($scope,  cartItems, $http) {
         
+  //get the qnty of items in cart
+    var quant = cartItems.getQty();
+    if(quant == undefined){
+        $scope.totalqty = 0;
+    }else{
+        $scope.totalqty = quant;
+    }
     $scope.$on('scanner-started', function(){
-        $scope.items = cartItems.getProperty('cart');
+        $scope.totalqty = cartItems.getHowMany();
+    });
+    console.log('totalqty '+$scope.totalqty); 
+    
+    $scope.$on('scanner-started', function(){
+        $scope.items = unique(cartItems.getProperty('cart'));
     });
    
-    $scope.items = cartItems.getProperty('cart');
-  
+    if(cartItems.getProperty('cart')){
+    $scope.items = unique(cartItems.getProperty('cart'));
+        update();
+    }else{
+    $scope.items = [];
+    }
+//Filter out repetitiions (genius)
+
+function unique(obj){
+    var uniques=[];
+    for(var i=0;i<obj.length;i++){
+         
+        
+        console.log(obj[i].id);
+      if(!uniques.filter(
+          function(e) { return e.title == obj[i].title; }).length > 0){
+                uniques.push(obj[i]);
+                console.log(uniques)
+         }else{
+             
+             uniques.filter(
+          function(e) {  e.title == obj[i].title; 
+                      return e.qty+=obj[i].qty})
+         }
+
+    }
+    return uniques;
+}
+//
     
     $scope.removeItem = function(index) {
         $scope.items.splice(index, 1);
-    },
+        update($scope.items);
+    }
 
+    function update(){
+        cartItems.reWrite($scope.items);
+        $scope.totalqty = cartItems.getHowMany();
+        cartItems.getQty();
+
+    }
+        
      $scope.total = function() {
         var total = 0;
         angular.forEach($scope.items, function(item) {
@@ -114,7 +151,9 @@ beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
          city: "",
          postalcode:""
      }
+
      
+
  //send info to db
  
     $scope.pay = function(){

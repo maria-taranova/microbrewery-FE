@@ -6,7 +6,11 @@ beercatApp.factory('storageService', function($rootScope) {
             // JSON.parse(localStorage.getItem(key));            
             console.log(key + ':' + JSON.parse(localStorage.getItem(
                 key)));
-            return JSON.parse(localStorage.getItem(key));
+            if(localStorage.getItem(key) != null){
+                return JSON.parse(localStorage.getItem(key));
+            }else{
+                return new Array();
+            }
         },
         save: function(key, data) {
            // console.log(key + ':' + localStorage['cart']);
@@ -105,10 +109,11 @@ beercatApp.service('cartItems', function(cacheService, $rootScope) {
             this.getQty();
         },
         reWrite: function(beer){
-            invoice.items = [];
-            invoice.items.push(beer);
-            console.log(invoice.items);
-            this.getQty();
+            /*Update service when changes in cart*/
+            invoice.items = beer;
+            console.log(beer, invoice.items);
+            cacheService.setData('cart', invoice.items);
+
 
         }
       /*  UpdateCartStatus: function(item, state) {
