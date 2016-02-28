@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var beercatApp = angular.module('beercatApp', ['ngRoute']);
+var beercatApp = angular.module('beercatApp', ['ngRoute', 'ratingApp']);
 
 beercatApp.config(['$routeProvider', '$locationProvider', function($routeProvide, $locationProvider){
   $routeProvide
@@ -39,17 +39,7 @@ beercatApp.config(['$routeProvider', '$locationProvider', function($routeProvide
 
 beercatApp.controller('beerListCtrl',['$scope', 'cartItems', '$http', '$location', function($scope, cartItems, $http, $location) {
     
-    //check if something is in the cart and set the qty
-    var quant = cartItems.getHowMany();
-    if(quant == undefined){
-        $scope.totalqty = 0;
-    }else{
-        $scope.totalqty = quant;
-    }
-    $scope.$on('scanner-started', function(){
-        $scope.totalqty = cartItems.getHowMany();
-    });
-    console.log('totalqty '+$scope.totalqty); 
+    
  
   //console.log('$location.url() - ', $location.url());
   //console.log('$location.path() - ', $location.path());
@@ -80,18 +70,87 @@ beercatApp.controller('AboutCtrl',['$scope','$http', '$location', function($scop
 //Cart controller
 beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
     function ($scope,  cartItems, $http) {
-        
+ 
+    
+
+  //get the qnty of items in cart
+    var quant = cartItems.getQty();
+    if(quant == undefined){
+        $scope.totalqty = 0;
+    }else{
+        $scope.totalqty = quant;
+    }
     $scope.$on('scanner-started', function(){
-        $scope.items = cartItems.getProperty('cart');
+        $scope.totalqty = cartItems.getHowMany();
+    });
+    console.log('totalqty '+$scope.totalqty); 
+    
+    $scope.$on('scanner-started', function(){
+        $scope.items = unique(cartItems.getProperty('cart'));
     });
    
-    $scope.items = cartItems.getProperty('cart');
-  
+    if(cartItems.getProperty('cart')){
+    $scope.items = unique(cartItems.getProperty('cart'));
+        update();
+    }else{
+    $scope.items = [];
+    }
+        
+                
+//hide content if nothing in cart
+      $scope.checkCart = function(){
+        if($scope.totalqty == 0){
+            console.log("check in progress");
+          var stepOne = document.getElementById('step-1');
+        console.log(stepOne);
+            stepOne.innerHTML = '<div class="col-xs-12"><div class="col-md-12 well text-center"><h2>Nothing in cart</h2></div></div>';
+        }
+    }      
+//
+    
+//Filter out repetitiions (genius)
+ 
+        
+function unique(obj){
+    var uniques=[];
+    for(var i=0;i<obj.length;i++){
+         
+        
+        console.log(obj[i].id);
+      if(!uniques.filter(
+          function(e) { return e.title == obj[i].title; }).length > 0){
+                uniques.push(obj[i]);
+                console.log(uniques)
+         }else{
+             
+             uniques.filter(
+          function(e) {  e.title == obj[i].title; 
+                      return e.qty+=obj[i].qty})
+         }
+
+    }
+    return uniques;
+}
+//
     
     $scope.removeItem = function(index) {
         $scope.items.splice(index, 1);
-    },
+        update($scope.items);
+    }
+//change qty
+    
+$scope.changed = function(){
+       update($scope.items);
+   }
+    //end of change qty
 
+    function update(){
+        cartItems.reWrite($scope.items);
+        $scope.totalqty = cartItems.getHowMany();
+        cartItems.getQty();
+
+    }
+        
      $scope.total = function() {
         var total = 0;
         angular.forEach($scope.items, function(item) {
@@ -101,7 +160,11 @@ beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
         return total;
     }
     
-  
+     $scope.modifyCart = function(){
+         console.log($scope.items);
+         cartItems.setProperty($scope.items);
+         console.log("cart modified");
+      }
     
      $scope.customer = {
          fname: "",
@@ -110,11 +173,12 @@ beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
          city: "",
          postalcode:""
      }
+
      
+
  //send info to db
  
     $scope.pay = function(){
-            console.log($scope.customer);
             var cart_url = './controller/cart.php';
             var request = $http({
                 method: "post",
@@ -125,17 +189,27 @@ beercatApp.controller('CartCtrl', ['$scope', 'cartItems', '$http',
                      email: $scope.customer.email,
                      city: $scope.customer.city,
                      postalcode: $scope.customer.postalcode,
-                     total: $scope.total()
+                     items: $scope.items
                 },
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
             });
                         request.success(function (data) {
                             console.log(data);
-            });
+                            togglediv('step-2', 'step-3');
+                                $scope.invoice = $scope.items;
+                                $scope.totalsum = $scope.total();
+                               console.log($scope.invoice+ " the sum "+$scope.totalsum);
+                             cartItems.removeItems();
+                            
+                             
+                        });
      }
      
 
-     
+     //show final invoice
+    
+
+
    /* $scope.formInvoice = function(){
         
         var total = $scope.total();
@@ -226,4 +300,22 @@ var url_img = './controller/product_img.php';
                                
 }]);
 
+beercatApp.directive('googleplace', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, model) {
+            var options = {
+                types: [],
+                componentRestrictions: {}
+            };
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], options);
+
+            google.maps.event.addListener(scope.gPlace, 'place_changed', function() {
+                $scope.$apply(function() {
+                    model.$setViewValue(element.val());                
+                });
+            });
+        }
+    };
+});
 

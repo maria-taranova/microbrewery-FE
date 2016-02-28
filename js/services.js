@@ -115,7 +115,12 @@ beercatApp.service('cartItems', function(cacheService, $rootScope) {
             cacheService.setData('cart', invoice.items);
 
 
-        }
+        },
+        removeItems: function(){
+            cacheService.removeData('cart');
+            cacheService.removeData('total');
+
+    }
       /*  UpdateCartStatus: function(item, state) {
             $scope.searchResults = _.map($scope.searchResults, function(el)         {
                 if (el.itemId === item.itemId) {

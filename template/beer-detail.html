@@ -48,6 +48,18 @@
             <button id="add" class="btn" ng-click="addItem(beer)">Add to Cart</button>
         
         </li>
+        
     </ul>
+      
+      <!--starts-->
+        <div class="alert alert-info" ng-controller="ratingCtrl"> <span class="label label-info">Rate the best flavor</span>
+
+            <div star-rating rating="starRating3" click="click3(param)" mouse-hover="mouseHover3(param)" mouse-leave="mouseLeave3(param)"></div>
+            <div> <span class="label label-primary">Star Rating: {{starRating3}}</span>
+ <span class="label label-primary">Hover Rating: {{hoverRating3}}</span>
+
+            </div>
+        </div>
+      <!--stars finish-->
   </div>
 </div>

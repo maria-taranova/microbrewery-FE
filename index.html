@@ -24,7 +24,7 @@
         <li><a href="#/about">About</a></li>
         <li><a href="#/contact">Contact</a></li>
       </ul>
-        <a  class="navbar-brand" style="float: right" href="#/cart">Cart
+        <a  class="navbar-brand" style="float: right" href="#/cart" ng-click="lol()">Cart
             <span ng-controller = 'CartCtrl'  id="totalqty" style="color: white"> {{totalqty}} </span></a>
 
     </div><!-- /.nav-collapse -->
@@ -58,5 +58,9 @@
     <script src="js/app.js"></script>
     <script src="js/services.js"></script>
  <script src="js/filters.js"></script>
+     <script src="js/rating-controller.js"></script>
+
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+
 </body>
 </html>

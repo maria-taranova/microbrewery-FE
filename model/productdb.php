@@ -59,7 +59,7 @@ function add_user(){
     $city = $request->city;
     $postalcode = $request->postalcode;
              
-    $query = "INSERT INTO `beer`.`users` (`id`, `lname`, `fname`, `email`, `city`, `postalcode`) VALUES (NULL, '".$lname."', '".$fname."', '".$email."', '".$city."', '".$postalcode."')";
+    $query = "INSERT INTO `users` (`id`, `lname`, `fname`, `email`, `city`, `postalcode`) VALUES (NULL, '".$lname."', '".$fname."', '".$email."', '".$city."', '".$postalcode."')";
     $result = $db->query($query);
     echo json_encode($result->fetchAll(PDO::FETCH_CLASS));
 
@@ -72,20 +72,52 @@ function add_order(){
     $postdata = file_get_contents("php://input");
     $request = json_decode($postdata);
     $email = $request->email;
-    $total = $request->total;            
+   
+            
+
 
     
     $query = "
     BEGIN;
-    INSERT INTO `beer`.`orders` (`id`, `user_id`) VALUES (NULL, (SELECT id FROM users WHERE email='".$email."'));
-    INSERT INTO `beer`.`orderdetail` (`order_id`, `total`, `date`) VALUES ((SELECT MAX(id) FROM orders), '".$total."', CURRENT_TIMESTAMP);
-    INSERT INTO `beer`.`order_items` (`product_id`, `product_price`, `order_id`) VALUES ('1', '9000', (SELECT MAX(id) FROM orders));
+    INSERT INTO `orders` (`id`, `user_id`) VALUES (NULL, (SELECT id FROM users WHERE email='".$email."'));
+    INSERT INTO `orderdetail` (`order_id`,  `date`) VALUES ((SELECT MAX(id) FROM orders), CURRENT_TIMESTAMP);
     COMMIT";
     $result = $db->query($query);
-    echo $email;
-
     
+
 }
+
+
+
+function insert_order_items(){
+  global $db;
+   
+    $postdata = file_get_contents("php://input");
+    $request = json_decode($postdata);
+
+    $items = $request->items;
+    $items = json_decode(json_encode($items), true);
+    
+    
+    
+     $query = "INSERT INTO `order_items` (`product_id`, `product_price`, `order_id`, `product_qty`) VALUES";
+    
+    $valuesArr = array();
+    
+    foreach($items as $row){
+          $product_id = (int) $row['id'];
+          $cost = (int) $row['cost']; 
+          $qty = (int) $row['qty'];
+        
+          $valuesArr[] = "('$product_id', '$cost', (SELECT MAX(id) FROM orders), '$qty')";
+     };
+
+    $query .= implode(',', $valuesArr);
+    $result = $db->query($query);
+
+
+   var_dump($query);
+};
 
 function delete_user(){
     //delete info for users
@@ -95,4 +127,6 @@ function delete_user(){
 //insert_user();
 
 //SELECT * FROM `orders` INNER JOIN orderdetail on orders.id=orderdetail.order_id INNER JOIN order_items ON orders.id = order_items.order_id
+
+//SELECT *, (product_price * product_qty) AS total FROM `orderdetail` INNER JOIN orders ON orderdetail.order_id = orders.id INNER JOIN order_items ON orderdetail.order_id = order_items.order_id 
 ?>

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.7
+-- version 4.4.10
 -- http://www.phpmyadmin.net
 --
--- Host: localhost:3306
--- Generation Time: Feb 15, 2016 at 06:48 PM
--- Server version: 5.5.41-log
--- PHP Version: 5.6.8
+-- Host: localhost
+-- Generation Time: Feb 26, 2016 at 09:06 PM
+-- Server version: 5.5.42
+-- PHP Version: 5.6.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `beer`
@@ -26,11 +26,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `images`
 --
 
-CREATE TABLE IF NOT EXISTS `images` (
+CREATE TABLE `images` (
   `product_id` int(11) NOT NULL,
   `image_url` varchar(800) NOT NULL,
-`id` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
+  `id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `images`
@@ -77,12 +77,30 @@ INSERT INTO `images` (`product_id`, `image_url`, `id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `likes`
+--
+
+CREATE TABLE `likes` (
+  `beer_id` int(11) NOT NULL,
+  `likes_num` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`beer_id`, `likes_num`) VALUES
+(1, 1),
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `orderdetail`
 --
 
-CREATE TABLE IF NOT EXISTS `orderdetail` (
+CREATE TABLE `orderdetail` (
   `order_id` int(11) NOT NULL,
-  `total` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -90,8 +108,14 @@ CREATE TABLE IF NOT EXISTS `orderdetail` (
 -- Dumping data for table `orderdetail`
 --
 
-INSERT INTO `orderdetail` (`order_id`, `total`, `date`) VALUES
-(3, 33, '2016-02-06 02:01:29');
+INSERT INTO `orderdetail` (`order_id`, `date`) VALUES
+(3, '2016-02-06 02:01:29'),
+(8, '2016-02-26 18:30:41'),
+(9, '2016-02-26 18:35:04'),
+(10, '2016-02-26 18:35:35'),
+(11, '2016-02-26 18:49:24'),
+(12, '2016-02-26 18:51:06'),
+(26, '2016-02-26 19:14:52');
 
 -- --------------------------------------------------------
 
@@ -99,10 +123,10 @@ INSERT INTO `orderdetail` (`order_id`, `total`, `date`) VALUES
 -- Table structure for table `orders`
 --
 
-CREATE TABLE IF NOT EXISTS `orders` (
-`id` int(11) NOT NULL,
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `orders`
@@ -111,7 +135,13 @@ CREATE TABLE IF NOT EXISTS `orders` (
 INSERT INTO `orders` (`id`, `user_id`) VALUES
 (3, 7),
 (7, 22),
-(6, 61);
+(6, 61),
+(8, 66),
+(9, 67),
+(10, 68),
+(11, 69),
+(12, 72),
+(26, 92);
 
 -- --------------------------------------------------------
 
@@ -119,11 +149,35 @@ INSERT INTO `orders` (`id`, `user_id`) VALUES
 -- Table structure for table `order_items`
 --
 
-CREATE TABLE IF NOT EXISTS `order_items` (
+CREATE TABLE `order_items` (
   `product_id` int(11) NOT NULL,
   `product_price` int(11) DEFAULT NULL,
-  `order_id` int(11) NOT NULL
+  `order_id` int(11) NOT NULL,
+  `product_qty` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`product_id`, `product_price`, `order_id`, `product_qty`) VALUES
+(3, 3, 8, 0),
+(3, 3, 9, 0),
+(3, 3, 10, 0),
+(6, 4, 10, 0),
+(1, 1, 6, 11),
+(3, 12, 3, 22),
+(3, 3, 12, 19),
+(6, 4, 12, 18),
+(9, 3, 12, 1),
+(3, 3, 12, 24),
+(6, 4, 12, 23),
+(9, 3, 12, 6),
+(1, 4, 12, 6),
+(3, 3, 26, 24),
+(6, 4, 26, 23),
+(9, 3, 26, 6),
+(1, 4, 26, 6);
 
 -- --------------------------------------------------------
 
@@ -131,8 +185,8 @@ CREATE TABLE IF NOT EXISTS `order_items` (
 -- Table structure for table `products`
 --
 
-CREATE TABLE IF NOT EXISTS `products` (
-`id` int(11) NOT NULL,
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
   `title` varchar(300) NOT NULL,
   `description` varchar(900) NOT NULL,
   `price` int(50) NOT NULL,
@@ -140,7 +194,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `image` varchar(400) NOT NULL,
   `vol` varchar(200) NOT NULL,
   `inventory` int(200) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `products`
@@ -166,14 +220,14 @@ INSERT INTO `products` (`id`, `title`, `description`, `price`, `alcohol`, `image
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
-`id` int(11) NOT NULL,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
   `lname` varchar(400) NOT NULL,
   `fname` varchar(400) NOT NULL,
   `email` varchar(400) NOT NULL,
   `city` varchar(400) NOT NULL,
   `postalcode` varchar(10) NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -242,7 +296,57 @@ INSERT INTO `users` (`id`, `lname`, `fname`, `email`, `city`, `postalcode`) VALU
 (62, 's', 's', 'sfrggtfd', 's', 's'),
 (63, 's', 's', 'sfrggtfd', 's', 's'),
 (64, 's', 's', 'sfrggtfd', 's', 's'),
-(65, 's', 's', 'sfrggtfd', 's', 's');
+(65, 's', 's', 'sfrggtfd', 's', 's'),
+(66, 'ii', 'mari', 'ii@ii.fo', 'Oostende, Belgium', 'oo'),
+(67, 'ii', 'mari', 'ii@ii.fog', 'Oostende, Belgium', 'oo'),
+(68, 'lname', 'name', 'jaidex@list.rud', 'St. John Ambulance, Alpha Avenue, Burnaby, BC, Canada', 'lsdk'),
+(69, 'sd', 'sd', 'sd@df.jk', 'sd', 'sd'),
+(70, 'sd', 'sd', 'sd@df.jk', 'sd', 'sd'),
+(71, 'sd', 'sd', 'sd@df.jk', 'sd', 'sd'),
+(72, 'sd', 'sd', 'sd@df.jkd', 'sd', 'sd'),
+(73, 'sd', 'sd', 'sd@df.jkdd', 'sd', 'sd'),
+(74, 'sd', 'sd', 'sd@df.jkdd', 'sd', 'sd'),
+(75, 'sd', 'sd', 'sd@df.jkdd', 'sd', 'sd'),
+(76, 'sd', 'sd', 'sd@df.jkddcvf', 'sd', 'sd'),
+(77, 'sd', 'sd', 'sd@df.jkddcvfd', 'sd', 'sd'),
+(78, 'sd', 'sd', 'sd@df.jkddcvfddd', 'sd', 'sd'),
+(79, 'sd', 'sd', 'sdd@df.jkddcvfddd', 'sd', 'sd'),
+(80, 'sd', 'sd', 'sdd@df.v', 'sd', 'sd'),
+(81, 'df', 'df', 'sds@sd.hj', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(82, 'df', 'df', 'sds@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(83, 'df', 'df', 'sdfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(84, 'df', 'df', 'sdfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(85, 'df', 'df', 'sdfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(86, 'df', 'df', 'sdfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(87, 'df', 'df', 'sdrfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(88, 'df', 'df', 'sdrsfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(89, 'df', 'df', 'sdrsfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(90, 'df', 'df', 'sdfrsfs@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(91, 'df', 'df', 'uu@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(92, 'df', 'df', 'uud@sd.hjds', 'Ghaziabad, Uttar Pradesh, India', 'fhy'),
+(93, 'f', 'f', '', 'Delta, BC, Canada', 'd'),
+(94, '', '', '', '', ''),
+(95, '', '', '', '', ''),
+(96, '', '', '', '', ''),
+(97, '', '', '', '', ''),
+(98, '', '', '', '', ''),
+(99, '', '', '', '', ''),
+(100, '', '', '', '', ''),
+(101, '', '', '', '', ''),
+(102, '', '', '', '', ''),
+(103, '', '', '', '', ''),
+(104, '', '', '', '', ''),
+(105, '', '', '', '', ''),
+(106, '', '', '', '', ''),
+(107, '', '', '', '', ''),
+(108, '', '', '', '', ''),
+(109, '', '', '', '', ''),
+(110, '', '', '', '', ''),
+(111, '', '', '', '', ''),
+(112, '', '', '', '', ''),
+(113, '', '', '', '', ''),
+(114, '', '', '', '', ''),
+(115, '', '', '', '', '');
 
 --
 -- Indexes for dumped tables
@@ -252,37 +356,46 @@ INSERT INTO `users` (`id`, `lname`, `fname`, `email`, `city`, `postalcode`) VALU
 -- Indexes for table `images`
 --
 ALTER TABLE `images`
- ADD PRIMARY KEY (`id`), ADD KEY `product_id` (`product_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD KEY `beer_id` (`beer_id`);
 
 --
 -- Indexes for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
- ADD KEY `order_id` (`order_id`);
+  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
- ADD PRIMARY KEY (`id`), ADD KEY `user_id` (`user_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `order_items`
 --
 ALTER TABLE `order_items`
- ADD KEY `product_id` (`product_id`,`order_id`), ADD KEY `order_id` (`order_id`);
+  ADD KEY `product_id` (`product_id`,`order_id`),
+  ADD KEY `order_id` (`order_id`);
 
 --
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -292,22 +405,22 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `images`
 --
 ALTER TABLE `images`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=116;
 --
 -- Constraints for dumped tables
 --
@@ -316,26 +429,32 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
 -- Constraints for table `images`
 --
 ALTER TABLE `images`
-ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`beer_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-ADD CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_items`
 --
 ALTER TABLE `order_items`
-ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

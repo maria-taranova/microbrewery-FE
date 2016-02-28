@@ -12,8 +12,8 @@
     var div2 = document.getElementById(id2);
     div1.classList.toggle('step-active');
     div1.classList.toggle('step');
-    div2.classList.toggle('step');
     div2.classList.toggle('step-active');
+    div2.classList.toggle('step');
         
     var topNav = document.getElementsByClassName('disabled'); 
  
@@ -32,6 +32,13 @@
          
      };
           
-    }
+    };
+var lol = function () {
+    if($scope.totalqty == 0){
+    var stepOne = document.getElementById("step-1");
+    stepOne.innerHTML = "Nothing herew yet";   
+    console.log("inner acript");
+};
+};
 
     

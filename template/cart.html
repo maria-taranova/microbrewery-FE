@@ -1,26 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
     <div class="container">
         <div class="row form-group">
             <div class="col-xs-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
                     <li class="active" id="st-1">
-                        <a href="#">
+                        <a href="javascript:void(0)">
                         <h4 class="list-group-item-heading">Step 1</h4>
                         <p class="list-group-item-text">Shopping Cart</p></a>
                     </li>
                     <li class="disabled" id="st-2">
-                        <a href="#">
+                        <a href="javascript:void(0)">
                         <h4 class="list-group-item-heading">Step 2</h4>
                         <p class="list-group-item-text">Second step
                         description</p></a>
                     </li>
                     <li class="disabled" id="st-3">
-                        <a href="#">
+                        <a href="javascript:void(0)">
                         <h4 class="list-group-item-heading">Step 3</h4>
                         <p class="list-group-item-text">Third step
                         description</p></a>
@@ -28,7 +22,7 @@
                 </ul>
             </div>
         </div><!--*Cart*-->
-        <div class="row setup-content step-active" id="step-1">
+        <div class="row setup-content step-active" id="step-1" ng-init="checkCart()">
             <div class="col-xs-12">
                 <div class="col-md-12 well text-center">
                     <h2>Shopping Cart</h2>
@@ -41,14 +35,14 @@
                                 <th>Total</th>
                                 <th></th>
                             </tr>
-                            <tr ng-repeat="item in items">
+                            <tr ng-model="items" ng-repeat="item in items">
                                 <td>{{item.title}}</td>
                                 <td><input class="input-mini" type=
-                                "number" min="1" id="qty" ng-model="item.qty"></td>
+                                "number" min="1" id="qty" ng-model="item.qty" ng-change="changed()"></td>
                                 <td>{{item.cost|currency}}</td>
                                 <td>{{item.qty * item.cost | currency}}</td>
                                 <td>
-                                    [<a href="">X</a>]
+                                    [<a ng-click="removeItem($index)" href="">X</a>]
                                 </td>
                             </tr>
                             <tr>
@@ -66,13 +60,10 @@
             </div>
         </div><!--*Payment*-->
         <div class="row setup-content step" id="step-2">
-        
-            
-            
             <div class="col-xs-12">
                 <div class="col-md-12 well">
                     <h1 class="text-center">Payment</h1>
-                    <!--Form-->
+              <!--Form-->
                     
                        <form>
   <fieldset class="form-group col-xs-4">
@@ -97,7 +88,7 @@
       
 
       <label for="city">City</label>
-    <input type="text" class="form-control" id="city" placeholder="City" ng-model="customer.city">
+    <input type="text" class="form-control" id="city" placeholder="City" ng-model="customer.city" googleplace>
     <small class="text-muted">We'll never share your email with anyone else.</small>
   </fieldset>
                                  <fieldset class="form-group col-xs-4" >
@@ -111,20 +102,50 @@
                     
                     <div style="clear: both" class="text-center">
                     <!--Form End-->
-                    <button class="btn btn-primary btn-lg " ng-click="pay()" >Payment</button>
+
+                    
+                    <!--Form End-->
+                    <button class="btn btn-primary btn-lg" ng-click="pay()" >Payment</button>
                 <!--onclick=
                     " togglediv('step-2', 'step-3')"-->
+                </div>
+            </div>
+        </div> 
+        </div><!--*Thank you*-->
+        <div class="row setup-content step" id="step-3">
+                     <div class="col-xs-12">
+                <div class="col-md-12 well text-center">
+                    <h2>Thank you</h2>
+                    <p>Your order details</p>
+                    <div>
+                        <table class="table">
+                            <tr>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-model="items" ng-repeat="item in invoice">
+                                <td>{{item.title}}</td>
+                                <td>{{item.qty}}</td>
+                                <td>{{item.cost|currency}}</td>
+                                <td>{{item.qty * item.cost | currency}}</td>
+                                <td>
+                                   
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                  
+                                </td>
+                                <td></td>
+                                <td>Total:</td>
+                                <td>{{total() | currency}}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div><!--*Thank you*-->
-        <div class="row setup-content step" id="step-3">
-            <div class="col-xs-12">
-                <div class="col-md-12 well">
-                    <h1 class="text-center">Thank you</h1>
-                </div>
-            </div>
-        </div>
+        </div><!--*Thank you ended*-->
     </div>
-</body>
-</html>

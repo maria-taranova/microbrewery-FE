@@ -5,6 +5,7 @@
 html,
 body {
   overflow-x: hidden; /* Prevent scroll on narrow devices */
+        font-family: "Raleway","HelveticaNeue","Helvetica Neue",sans-serif;
 }
 body {
   padding-top: 70px;
